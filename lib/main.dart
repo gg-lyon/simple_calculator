@@ -1,6 +1,9 @@
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_firstclass/screens/ConversionScreen.dart';
+
 
 
 void main() {
@@ -30,6 +33,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+
     );
   }
 }
@@ -147,6 +151,15 @@ class _MyHomePageState extends State<MyHomePage> {
             RaisedButton(
                 onPressed: _power,
                 child: Text('^')
+            ),
+            RaisedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ConversionScreen()),
+                  );
+                },
+                child: Text('Convert Page')
             )
           ],
         ),
@@ -154,3 +167,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
