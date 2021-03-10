@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_firstclass/screens/ConversionScreen.dart';
+import 'package:flutter_firstclass/screens/HistoryScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -60,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _number1;
   int _number2;
   int _sum = 0;
+  Future<SharedPreferences> prefs;
 
   _addition() {
     setState(() {
@@ -90,79 +93,101 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    prefs = SharedPreferences.getInstance();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(        //alt + enter shortcut to wrap
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Enter first number",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0)))
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  _number1 = int.parse(value);
-              },),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Enter second number",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0)))
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  _number2 = int.parse(value);
-              },),
-            ),
-            Text('Sum: $_sum'),
+      body: FutureBuilder<SharedPreferences>(
+        future: prefs,
+        builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+            return Center(
+              child: Center(
+                child: Column(
+                  children: [
+                    Padding( //alt + enter shortcut to wrap
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: "Enter first number",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(5.0)))
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          _number1 = int.parse(value);
+                        },),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: "Enter second number",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(5.0)))
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          _number2 = int.parse(value);
+                        },),
+                    ),
+                    Text('Sum: $_sum'),
 
-            RaisedButton(
-                onPressed: _addition,
-                child: Text('+')
-            ),
-            RaisedButton(
-                onPressed: _subtract,
-                child: Text('-')
-            ),
-            RaisedButton(
-                onPressed: _multiply,
-                child: Text('*')
-            ),
-            RaisedButton(
-                onPressed: _divide,
-                child: Text('/')
-            ),
-            RaisedButton(
-                onPressed: _power,
-                child: Text('^')
-            ),
-            RaisedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ConversionScreen()),
-                  );
-                },
-                child: Text('Convert Page')
-            )
-          ],
-        ),
+                    RaisedButton(
+                        onPressed: _addition,
+                        child: Text('+')
+                    ),
+                    RaisedButton(
+                        onPressed: _subtract,
+                        child: Text('-')
+                    ),
+                    RaisedButton(
+                        onPressed: _multiply,
+                        child: Text('*')
+                    ),
+                    RaisedButton(
+                        onPressed: _divide,
+                        child: Text('/')
+                    ),
+                    RaisedButton(
+                        onPressed: _power,
+                        child: Text('^')
+                    ),
+                    RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ConversionScreen()),
+                          );
+                        },
+                        child: Text('Convert Page')
+                    ),
+                    RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HistoryScreen()),
+                          );
+                        },
+                        child: Text('History Page')
+                    ),
+                  ],
+                ),
+              ),
+            );
+        }
       ),
     );
   }
